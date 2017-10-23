@@ -87,6 +87,22 @@ class RemoteInstance {
     });
   }
 
+  // Authentication
+  // -------------------------------------------
+  authenticate(email = requiredParam('email'), password = requiredParam('password')){
+    return new Promise((resolve, reject) => {
+      this._post('auth/request-token', {email, password})
+        .then(res => {
+          if(res.success){
+            this.accessToken = res.data.token;
+            return resolve(res);
+          }
+          return reject(res);
+        })
+        .catch(err => reject(err));
+    });
+  };
+
   // Items
   // ----------------------------------------------------------------------------------
   createItem(table = requiredParam('table'), data = {}) {
